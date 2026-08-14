@@ -38,6 +38,7 @@
             font-weight: bold;
         }
     </style>
+    <!-- Carga del SDK de Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
@@ -47,15 +48,13 @@
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
 
-                <!-- Sección de Encabezado Dividido en 2 Partes -->
+                <!-- Encabezado -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-body p-3">
                         <div class="row align-items-center">
-                            <!-- Parte Izquierda: Imagen -->
                             <div class="col-4 text-center">
                                 <img src="logosena2.png" alt="Logo SENA" class="img-fluid" style="max-height: 80px;">
                             </div>
-                            <!-- Parte Derecha: Textos -->
                             <div class="col-8">
                                 <h5 class="fw-bold mb-1 title-color">Regional Bolivar</h5>
                                 <h6 class="fw-bold mb-0 title-color">Centro Agroempresarial y Minero</h6>
@@ -69,15 +68,15 @@
                     <div class="card-body p-4">
                         <h2 class="text-center mb-4 title-color">Registro de Asistencia</h2>
 
-                        <form class="needs-validation" novalidate>
+                        <form id="form-asistencia" class="needs-validation" novalidate>
 
-                            <!-- Institucion -->
+                            <!-- Institución -->
                             <div class="mb-3">
-                                <label class="form-label">Institucion <span class="req-star">*</span></label>
+                                <label class="form-label">Institución <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-house-door"></i></span>
                                     <input type="text" class="form-control" id="institucion"
-                                        placeholder="Institucion Educativa" list="lista-instituciones" required
+                                        placeholder="Institución Educativa" list="lista-instituciones" required
                                         autocomplete="off">
                                 </div>
                                 <datalist id="lista-instituciones"></datalist>
@@ -88,8 +87,8 @@
                                 <label class="form-label">Nombre <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" class="form-control" placeholder="Nombre Del Participante"
-                                        required>
+                                    <input type="text" class="form-control" id="nombre"
+                                        placeholder="Nombre Del Participante" required>
                                 </div>
                             </div>
 
@@ -109,17 +108,17 @@
                                 <label class="form-label">Celular <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-phone-vibrate"></i></span>
-                                    <input type="tel" class="form-control" placeholder="Numero De Celular"
+                                    <input type="tel" class="form-control" id="celular" placeholder="Número De Celular"
                                         pattern="[0-9]{10}" required>
                                 </div>
                             </div>
 
-                            <!-- Email con validación -->
+                            <!-- Email -->
                             <div class="mb-3">
                                 <label class="form-label">Email <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
-                                    <input type="email" class="form-control" id="email" placeholder="Correo Electronico"
+                                    <input type="email" class="form-control" id="email" placeholder="Correo Electrónico"
                                         required>
                                 </div>
                                 <div class="invalid-feedback">Por favor ingrese un correo válido.</div>
@@ -132,7 +131,8 @@
 
                             <!-- Botón Enviar -->
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-custom btn-lg">Enviar Registro</button>
+                                <button type="submit" class="btn btn-custom btn-lg" id="btn-submit">Enviar
+                                    Registro</button>
                             </div>
 
                         </form>
@@ -147,27 +147,27 @@
     <script>
         const instituciones = [
             "INSTITUCION EDUCATIVA TECNICA AGROINDUSTRIAL REPUBLICA DE COLOMBIA",
-            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA  DE  SINCERIN",
+            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA DE SINCERIN",
             "INSTITUCION EDUCATIVA TECNICA EN ARTES Y OFICIOS MARIA MICHELSEN DE LOPEZ",
             "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA Y ACUÍCOLA PUERTO BADEL",
             "INSTITUCION EDUCATIVA TECNICA DE ARROYOHONDO ROBERTO BOTERO MORALES",
             "INSTITUCION EDUCATIVA TECNICA AGROINDUSTRIAL DE CALAMAR",
-            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA  DE EL YUCAL",
-            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA  JOSE ANTONIO GALAN",
+            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA DE EL YUCAL",
+            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA JOSE ANTONIO GALAN",
             "INSTITUCION EDUCATIVA DE BAYUNCA",
             "COLEGIO NUESTRA SEÑORA DE FATIMA DE LA POLICIA NACIONAL",
             "INSTITUCION EDUCATIVA TECNICO AGROPUECUARIA SAN JOSE DE CLEMENCIA",
             "INSTITUCION EDUCATIVA TECNICA AGROINDUSTRIAL DE MALAGANA",
-            "INSTITUCIÓN EDUCATIVA  TECNICA AGROPECUARIA EZEQUIEL MARTELO PIMIENTA DE SAN JOAQUIN",
+            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA EZEQUIEL MARTELO PIMIENTA DE SAN JOAQUIN",
             "INSTITUCION EDUCATIVA TECNICA AGROPECUARIA BENKOS BIOHO DE SAN BASILIO DE PALENQUE",
             "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA LAZARO MARTINEZ OLIER",
             "INSTITUCION EDUCATIVA TECNICA AGROPECUARIA FRANCISCO DE PAULA SANTANDER HIGUERETAL",
             "INSTITUCION EDUCATIVA TECNICA AGROPECUARIA LAS PIEDRAS",
-            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA  SOSTENIBLE Y AMBIENTAL FELIPE SANTIAGO ESCOBAR",
+            "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA SOSTENIBLE Y AMBIENTAL FELIPE SANTIAGO ESCOBAR",
             "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA NUESTRA SEÑORA DEL CARMEN",
             "INSTITUCIÓN EDUCATIVA SANTA ROSA DE LIMA",
             "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA LA BUENA ESPERANZA",
-            "INSTITUCION EDUCATIVA  DOCENTE DE TURBACO",
+            "INSTITUCION EDUCATIVA DOCENTE DE TURBACO",
             "INSTITUCION EDUCATIVA TECNICO INDUSTRIAL DE TURBANA",
             "INSTITUCIÒN EDUCATIVA MARCO FIDEL SUAREZ",
             "INSTITUCIÓN EDUCATIVA TECNICA AGROPECUARIA DE VILLANUEVA",
@@ -186,86 +186,74 @@
             "TECNICO AGRICOLA"
         ];
 
-        // Lógica de Autocompletado Institucion (>= 3 chars)
+        // Autocompletado Institucion
         const inputInstitucion = document.getElementById('institucion');
         const dataListInstituciones = document.getElementById('lista-instituciones');
         inputInstitucion.addEventListener('input', function () {
-            dataListInstituciones.innerHTML = this.value.length >= 3 ? instituciones.filter(i => i.toLowerCase().includes(this.value.toLowerCase())).map(i => `<option value="${i}">`).join('') : '';
+            dataListInstituciones.innerHTML = this.value.length >= 3
+                ? instituciones.filter(i => i.toLowerCase().includes(this.value.toLowerCase())).map(i => `<option value="${i}">`).join('')
+                : '';
         });
 
-        // Lógica de Autocompletado Cargo (>= 2 chars)
+        // Autocompletado Cargo
         const inputCargo = document.getElementById('cargo');
         const dataListCargos = document.getElementById('lista-cargos');
         inputCargo.addEventListener('input', function () {
-            dataListCargos.innerHTML = this.value.length >= 2 ? cargos.filter(c => c.toLowerCase().includes(this.value.toLowerCase())).map(c => `<option value="${c}">`).join('') : '';
+            dataListCargos.innerHTML = this.value.length >= 2
+                ? cargos.filter(c => c.toLowerCase().includes(this.value.toLowerCase())).map(c => `<option value="${c}">`).join('')
+                : '';
         });
 
-        // Validación Email (blur)
-        document.getElementById('email').addEventListener('blur', function () {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (this.value && !emailRegex.test(this.value)) {
-                this.classList.add('is-invalid');
-            } else {
-                this.classList.remove('is-invalid');
-            }
-        });
-
-        // Bootstrap validación
-        (function () {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })();
-    </script>
-
-    <script>
-        // 1. Inicialización correcta de Supabase
+        // Inicialización de Supabase
         const supabaseUrl = 'https://ueatzeyfeaxwqocwpjlf.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXR6ZXlmZWF4d3FvY3dwamxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTYxMTYsImV4cCI6MjEwMjIzMjExNn0.vr_-iFhpdzfsJpEOwAt1Or3fr0CsNMn4_kfEDikUFl8';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        const form = document.querySelector('form');
+        const form = document.getElementById('form-asistencia');
+        const btnSubmit = document.getElementById('btn-submit');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Verificar si el formulario es válido según las reglas de Bootstrap
+            // Validar HTML5
             if (!form.checkValidity()) {
                 e.stopPropagation();
                 form.classList.add('was-validated');
                 return;
             }
 
-            // 2. Captura correcta de datos (Asegúrate de que los nombres de las llaves 
-            // coincidan exactamente con las columnas de tu tabla en Supabase)
+            form.classList.add('was-validated');
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Enviando...';
+
+            // Mapeo exacto a los nombres de tus columnas en Supabase
             const formData = {
                 Institucion: document.getElementById('institucion').value,
-                nombre: document.querySelector('input[placeholder="Nombre Del Participante"]').value,
-                cargo: document.getElementById('cargo').value,
-                celular: document.querySelector('input[type="tel"]').value,
-                email: document.getElementById('email').value
+                Nombre: document.getElementById('nombre').value,
+                Cargo: document.getElementById('cargo').value,
+                Celular: document.getElementById('celular').value,
+                Email: document.getElementById('email').value
             };
 
-            // 3. Envío a Supabase
-            const { data, error } = await supabase
-                .from('asistenciaZode')
-                .insert([formData]);
+            try {
+                const { data, error } = await supabaseClient
+                    .from('asistenciaZode')
+                    .insert([formData]);
 
-            if (error) {
-                alert('Error al enviar: ' + error.message);
-                console.error('Detalle del error:', error);
-            } else {
-                alert('¡Registro enviado con éxito!');
-                form.reset();
-                form.classList.remove('was-validated');
+                if (error) {
+                    alert('Error al guardar datos: ' + error.message);
+                    console.error('Error Supabase:', error);
+                } else {
+                    alert('¡Registro enviado con éxito!');
+                    form.reset();
+                    form.classList.remove('was-validated');
+                }
+            } catch (err) {
+                alert('Ocurrió un error inesperado. Revisa la consola.');
+                console.error('Error de ejecución:', err);
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = 'Enviar Registro';
             }
         });
     </script>
