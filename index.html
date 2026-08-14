@@ -39,41 +39,6 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Modifica tu script al final del body -->
-    <script>
-        // 1. Inicializa Supabase
-        const supabaseUrl = 'https://ueatzeyfeaxwqocwpjlf.supabase.co';
-        const supabaseKey = 'sb_publishable_92N7Af11eReV6nmKLI6riw_-my4wLOQ';
-        const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
-
-        const form = document.querySelector('form');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // 2. Captura los datos
-            const formData = {
-                Institucion: document.getElementById('Institucion').value,
-                Nombre: document.getElementById('Nombre').value,
-                Cargo: document.getElementById('Cargo').value,
-                Celular: document.getElementById('Celular').value,
-                Email: document.getElementById('Email').value
-            };
-
-            // 3. Enviar a Supabase
-            const { data, error } = await supabase
-                .from('asistenciaZode')
-                .insert([formData]);
-
-            if (error) {
-                alert('Error al enviar: ' + error.message);
-            } else {
-                alert('¡Registro enviado con éxito!');
-                form.reset();
-            }
-        });
-    </script>
 </head>
 
 <body class="bg-light">
@@ -111,7 +76,7 @@
                                 <label class="form-label">Institucion <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-house-door"></i></span>
-                                    <input type="text" class="form-control" id="Institucion"
+                                    <input type="text" class="form-control" id="institucion"
                                         placeholder="Institucion Educativa" list="lista-instituciones" required
                                         autocomplete="off">
                                 </div>
@@ -123,8 +88,8 @@
                                 <label class="form-label">Nombre <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input type="text" id="Nombre" class="form-control"
-                                        placeholder="Nombre del Participante" required>
+                                    <input type="text" class="form-control" placeholder="Nombre Del Participante"
+                                        required>
                                 </div>
                             </div>
 
@@ -133,7 +98,7 @@
                                 <label class="form-label">Cargo <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-grid"></i></span>
-                                    <input type="text" class="form-control" id="Cargo" placeholder="Cargo"
+                                    <input type="text" class="form-control" id="cargo" placeholder="Cargo"
                                         list="lista-cargos" required autocomplete="off">
                                 </div>
                                 <datalist id="lista-cargos"></datalist>
@@ -144,7 +109,7 @@
                                 <label class="form-label">Celular <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-phone-vibrate"></i></span>
-                                    <input type="tel" id="Celular" class="form-control" placeholder="Numero de Celular"
+                                    <input type="tel" class="form-control" placeholder="Numero De Celular"
                                         pattern="[0-9]{10}" required>
                                 </div>
                             </div>
@@ -154,7 +119,7 @@
                                 <label class="form-label">Email <span class="req-star">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
-                                    <input type="email" class="form-control" id="Email" placeholder="Correo Electronico"
+                                    <input type="email" class="form-control" id="email" placeholder="Correo Electronico"
                                         required>
                                 </div>
                                 <div class="invalid-feedback">Por favor ingrese un correo válido.</div>
@@ -260,6 +225,41 @@
             })
         })();
     </script>
+
+    <script>
+        // 1. Inicializa Supabase
+        const supabaseUrl = 'https://ueatzeyfeaxwqocwpjlf.supabase.co';
+        const supabaseKey = 'sb_publishable_92N7Af11eReV6nmKLI6riw_-my4wLOQ';
+        const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
+
+        const form = document.querySelector('form');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 2. Captura los datos
+            const formData = {
+                Institucion: document.getElementById('Institucion').value,
+                nombre: document.querySelector('input[placeholder="Nombre Del Participante"]').value,
+                cargo: document.getElementById('cargo').value,
+                celular: document.querySelector('input[type="tel"]').value,
+                email: document.getElementById('email').value
+            };
+
+            // 3. Enviar a Supabase
+            const { data, error } = await supabase
+                .from('asistenciaZode')
+                .insert([formData]);
+
+            if (error) {
+                alert('Error al enviar: ' + error.message);
+            } else {
+                alert('¡Registro enviado con éxito!');
+                form.reset();
+            }
+        });
+    </script>
+
 </body>
 
 </html>
