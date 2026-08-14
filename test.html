@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Prueba de Conexión Supabase</title>
+    <!-- Carga del SDK de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <h2>Diagnóstico de Conexión a Supabase</h2>
+    <div id="resultado" style="padding: 15px; border: 1px solid #ccc; background: #f8f9fa;">
+        Conectando...
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://ueatzeyfeaxwqocwpjlf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXR6ZXlmZWF4d3FvY3dwamxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTYxMTYsImV4cCI6MjEwMjIzMjExNn0.vr_-iFhpdzfsJpEOwAt1Or3fr0CsNMn4_kfEDikUFl8';
+
+        // Inicializar cliente
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        const divResultado = document.getElementById('resultado');
+
+        async function probarConexion() {
+            try {
+                // Intentamos consultar la tabla 'asistenciaZode'
+                const { data, error, status } = await supabaseClient
+                    .from('asistenciaZode')
+                    .select('*')
+                    .limit(1);
+
+                if (error) {
+                    console.error('Error devuelto por Supabase:', error);
+                    divResultado.innerHTML = `
+                        <p style="color: red;"><strong>⚠️ La URL y Key responden, pero hay un problema con la base de datos:</strong></p>
+                        <ul>
+                            <li><strong>Código:</strong> ${error.code}</li>
+                            <li><strong>Mensaje:</strong> ${error.message}</li>
+                            <li><strong>Sugerencia:</strong> ${obtenerSugerencia(error.code)}</li>
+                        </ul>
+                    `;
+                } else {
+                    console.log('Respuesta exitosa:', data);
+                    divResultado.innerHTML = `
+                        <p style="color: green;"><strong>✅ ¡Conexión Exitosa con Supabase!</strong></p>
+                        <p>La URL y la Key son válidas y la tabla <code>asistenciaZode</code> responde correctamente.</p>
+                    `;
+                }
+            } catch (err) {
+                console.error('Error de red/servidor:', err);
+                divResultado.innerHTML = `
+                    <p style="color: red;"><strong>❌ Error crítico de conexión:</strong> ${err.message}</p>
+                `;
+            }
+        }
+
+        function obtenerSugerencia(codigo) {
+            if (codigo === '42P01') return 'La tabla "asistenciaZode" no existe o está mal escrita en Supabase.';
+            if (codigo === '42501' || codigo === 'PGRST301') return 'Falta configurar las Políticas RLS (Row Level Security) en Supabase para permitir lectura/escritura a usuarios anon.';
+            return 'Verifica la consola para más detalles.';
+        }
+
+        probarConexion();
+    </script>
+</body>
+
+</html>
