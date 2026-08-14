@@ -227,35 +227,45 @@
     </script>
 
     <script>
-        // 1. Inicializa Supabase
+        // 1. Inicialización correcta de Supabase
         const supabaseUrl = 'https://ueatzeyfeaxwqocwpjlf.supabase.co';
-        const supabaseKey = 'sb_publishable_92N7Af11eReV6nmKLI6riw_-my4wLOQ';
-        const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlYXR6ZXlmZWF4d3FvY3dwamxmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTYxMTYsImV4cCI6MjEwMjIzMjExNn0.vr_-iFhpdzfsJpEOwAt1Or3fr0CsNMn4_kfEDikUFl8';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         const form = document.querySelector('form');
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // 2. Captura los datos
+            // Verificar si el formulario es válido según las reglas de Bootstrap
+            if (!form.checkValidity()) {
+                e.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+
+            // 2. Captura correcta de datos (Asegúrate de que los nombres de las llaves 
+            // coincidan exactamente con las columnas de tu tabla en Supabase)
             const formData = {
-                Institucion: document.getElementById('Institucion').value,
+                Institucion: document.getElementById('institucion').value,
                 nombre: document.querySelector('input[placeholder="Nombre Del Participante"]').value,
                 cargo: document.getElementById('cargo').value,
                 celular: document.querySelector('input[type="tel"]').value,
                 email: document.getElementById('email').value
             };
 
-            // 3. Enviar a Supabase
+            // 3. Envío a Supabase
             const { data, error } = await supabase
                 .from('asistenciaZode')
                 .insert([formData]);
 
             if (error) {
                 alert('Error al enviar: ' + error.message);
+                console.error('Detalle del error:', error);
             } else {
                 alert('¡Registro enviado con éxito!');
                 form.reset();
+                form.classList.remove('was-validated');
             }
         });
     </script>
