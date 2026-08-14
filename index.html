@@ -244,9 +244,9 @@
                     alert('Error al guardar datos: ' + error.message);
                     console.error('Error Supabase:', error);
                 } else {
-                    alert('¡Registro enviado con éxito!');
                     form.reset();
                     form.classList.remove('was-validated');
+                    window.location.href = 'registrado.html';
                 }
             } catch (err) {
                 alert('Ocurrió un error inesperado. Revisa la consola.');
